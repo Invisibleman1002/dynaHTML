@@ -2,7 +2,8 @@
     ESP8266 WIFI Manager specific to my use case.
     Saves Data to the EEPPROM.
     HTML element can be a input type of TEXT of CHECKBOX
-
+    uses a dynamic array to generate the HTML elements to display.
+    The elements should map to an eeprom variable
 
     Created by Trey Aughenbaugh
     https://github.com/Invisibleman1002/dynaHTML
@@ -12,10 +13,14 @@
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
-  1.0.0   Trey A       03/31/2022  Initial coding for ESP8266
-  1.1.0   Trey A       04/01/2022  Added Grouping
+  1.0.0   Trey A       03/31/2022   Initial coding for ESP8266
+  1.1.0   Trey A       04/01/2022   Added Grouping
 
+  ! TODO
+    Convert this to a class.
 */
+#include <Arduino.h>
+
 const char content_Type[] = "text/html";
 
 const char html_top[] = R"rawlit(<!DOCTYPE html>
@@ -94,24 +99,14 @@ MenuItem allItem[] = {{"wiid", "SSID", MyconfigData.wifi_ssid, e_INPUT, 0},
                       {"mqp", "MQTT PW", MyconfigData.mqtt_key, e_INPUT, 1},
                       {"powr", "USB Power", MyconfigData.usb_power, e_CHECK, 2}};
 
-/*  !FOr the groups, could be a for loop ina for loop..  For i<group)  Just need to determine how to get the Max froup number.
-    char wifi_ssid[SSID_MAX_LEN];
-    char wifi_pw[PASS_MAX_LEN];
-    char mqtt_server[ADA_URL_LEN];
-    char sensorstatus[ADA_FEED_LEN];
-    char sensorname[ADA_KEY_LEN];
-    char mqtt_id[ADA_ID_LEN];
-    char mqtt_key[ADA_KEY_LEN];
-    char usb_power[2];
-*/
 // -- HTML page fragment
-#include <algorithm>
 uint16_t NUM_MENU_ITEMS = sizeof(allItem) / sizeof(MenuItem);
 // EXTERN because the functions are Created in the other file.  THis says, USE THEM otherwise you get out of scope error!  COOL.
 extern void saveconfigtoEE(configData MyconfigData);
 extern void saveAPEE(apData MyAPdata);
 extern configData MyconfigData;
 extern apData MyAPdata;
+
 void resetFunc()
 {
     delay(1000);
@@ -152,8 +147,8 @@ void createHTML(String &root_html_template)
 
         imax = my_max(allItem[i].group, imax);
     }
-    printf("min:%d\nmax:%d\n", imin, imax);
-    // std::minmax_element(
+    // printf("min:%d\nmax:%d\n", imin, imax);
+    //  minmax - tried to use min/max/minmax but wasnt getting it to work on this array of structures.
     /* ! NEED TO DEAL WITH group*/
     for (uint16_t g = 0; g <= imax; g++)
     {
