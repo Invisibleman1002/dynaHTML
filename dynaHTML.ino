@@ -66,7 +66,7 @@ bool apValid = false;
 #define EEPROM_SIZE (sizeof(configData) + sizeof(apData))
 #define eepromapstart sizeof(configData)
 
-#include "dynaHTML.h"
+#include "dynaOrig.h"
 int holdPin = 0; // defines GPIO 0 as the hold pin (will hold CH_PD high untill we power down).
 int pirPin = 12; // defines GPIO 12 as the PIR read pin (reads the state of the PIR output).
 int pir = 1;     // sets the PIR record (pir) to 1 (it must have been we woke up).
@@ -103,6 +103,17 @@ IPAddress gateway(192, 168, 0, 1);   //IP Address of your WiFi Router (Gateway)
 IPAddress subnet(255, 255, 255, 0);  //Subnet mask
 IPAddress dns(192, 168, 0, 1);//(8, 8, 8, 8);  //DNS
 */
+
+// Need to save the eeprom data and restart the esp
+void dynaCallback()
+{
+    saveconfigtoEE(MyconfigData);
+    // if we are updating data, force a refresh of the SSID
+    MyAPdata.crc32 = 8675309;
+    saveAPEE(MyAPdata);
+    delay(1000);
+    ESP.restart();
+}
 
 void create_NEW_feed(char *strng, char *NEWNAME)
 {
