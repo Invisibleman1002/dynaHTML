@@ -1,0 +1,57 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "OTA Upload",
+      "type": "shell",
+      "command": "py",
+      "args": [
+        "%LOCALAPPDATA%\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\espota.py",
+        "-i",
+        "192.168.0.232",
+        "-p",
+        "8266",
+        "-a",
+        "admin",
+        "-f",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.bin"
+      ],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      }
+    },
+    {
+      "label": "COM Upload",
+      "type": "shell",
+      "command": "py",
+      "args": [
+        "%LOCALAPPDATA%\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\tools\\esptool\\esptool.py",
+        "--chip",
+        "esp8266",
+        "--port",
+        "COM20",
+        "--baud",
+        "921600",
+        "write_flash",
+        "--flash_mode",
+        "dio",
+        "--flash_size",
+        "detect",
+        "0x0",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.bin"
+      ],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

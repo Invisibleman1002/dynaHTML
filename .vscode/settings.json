@@ -1,0 +1,37 @@
+{
+  "arduino.path": "C:/Program Files (x86)/Arduino",
+  "arduino.commandPath": "arduino_debug.exe",
+  "arduino.logLevel": "info",
+  "arduino.enableUSBDetection": true,
+  "arduino.disableTestingOpen": false,
+  "arduino.skipHeaderProvider": false,
+  "arduino.additionalUrls": [
+    "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json",
+    "https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json",
+    "https://arduino.esp8266.com/stable/package_esp8266com_index.json"
+  ],
+  "arduino.defaultBaudRate": 115200,
+  "files.associations": {
+    "array": "cpp",
+    "atomic": "cpp",
+    "bit": "cpp",
+    "*.tcc": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "algorithm": "cpp",
+    "functional": "cpp",
+    "memory": "cpp",
+    "memory_resource": "cpp",
+    "optional": "cpp",
+    "random": "cpp",
+    "system_error": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "cmath": "cpp",
+    "istream": "cpp",
+    "numeric": "cpp",
+    "ostream": "cpp",
+    "regex": "cpp",
+    "utility": "cpp"
+  }
+}
