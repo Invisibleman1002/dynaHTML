@@ -3,29 +3,10 @@
 flash size: FS 2mb ota 1019k
 upload 921600, which works, but interface changes to 460800.
 
- I'm using the setup to change the state of the CH pin to power the module down when its no longer needed.
- Supposed to save a lot more power than deep sleep.
- THa problem is, using a HALL EFFECT sensor consumes power while the chip is sleeping.
- Like 8 MA.
-
-Switched to Push-Pull Hall Effect!  Now uses less than 4uAmp
-
-  !TODO:
-    Setup WIFI off when Plugged in.
-      Maybe use one of the Pins to Detect its being powered.  would have to hard wire.
-      Paybe use GPIO5, if HIGH=1 on start, then its being powered by the USB plug.
-
-    // Insert whatever code here to turn off all your web-servers and clients and whatnot
-    WiFi.disconnect();
-    WiFi.forceSleepBegin();
-    delay(1); //For some reason the modem won't go to sleep unless you do a delay(non-zero-number) -- no delay, no sleep and delay(0), no sleep
-
-
-    And then wake the WiFi up:
-    CODE: SELECT ALL
-    WiFi.forceSleepEnd();
-    delay(1);
-    //Insert code to connect to WiFi, start your servers or clients or whatever
+  Version Modified By   Date        Comments
+  ------- -----------  ----------   -----------
+  1.0.0   Trey A       03/31/2022  Initial coding for ESP8266
+  1.1.0   Trey A       04/01/2022  Added Grouping
 
 */
 #define DEBUG_ON 1

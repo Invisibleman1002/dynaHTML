@@ -5,14 +5,17 @@
 
 
     Created by Trey Aughenbaugh
-    ! GITLINK
+    https://github.com/Invisibleman1002/dynaHTML
 
-    version 1.0.0
+    version 1.1.0
     * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 
+  Version Modified By   Date        Comments
+  ------- -----------  ----------   -----------
+  1.0.0   Trey A       03/31/2022  Initial coding for ESP8266
+  1.1.0   Trey A       04/01/2022  Added Grouping
 
 */
-#include <math.h>
 const char content_Type[] = "text/html";
 
 const char html_top[] = R"rawlit(<!DOCTYPE html>
@@ -49,9 +52,6 @@ const char html_btnJS[] = R"rawlit(
     </script>
   </body>
 </html>
-)rawlit";
-const char javascript[] = R"rawlit(
-        udVal("{id}", document.getElementById("{id}").value);
 )rawlit";
 
 const char *h_Elements[] = {R"rawlit(
@@ -92,7 +92,7 @@ MenuItem allItem[] = {{"wiid", "SSID", MyconfigData.wifi_ssid, e_INPUT, 0},
                       {"sn", "Sensor Name", MyconfigData.sensorname, e_INPUT, 2},
                       {"mqi", "MQTT ID", MyconfigData.mqtt_id, e_INPUT, 1},
                       {"mqp", "MQTT PW", MyconfigData.mqtt_key, e_INPUT, 1},
-                      {"powr", "USB Power", MyconfigData.usb_power, e_CHECK, 1}};
+                      {"powr", "USB Power", MyconfigData.usb_power, e_CHECK, 2}};
 
 /*  !FOr the groups, could be a for loop ina for loop..  For i<group)  Just need to determine how to get the Max froup number.
     char wifi_ssid[SSID_MAX_LEN];
@@ -155,39 +155,40 @@ void createHTML(String &root_html_template)
     printf("min:%d\nmax:%d\n", imin, imax);
     // std::minmax_element(
     /* ! NEED TO DEAL WITH group*/
-    for (uint16_t g = 0; g < imax; g++)
+    for (uint16_t g = 0; g <= imax; g++)
     {
         tmpData += "<fieldset>";
+        for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+        {
+            if (allItem[i].group == g)
+            {
+                pitem = h_Elements[allItem[i].HT_EM]; // Grab the type..  Currrently a TEXT or CHECKBOX
 
+                pitem.replace("{lbl}", allItem[i].displayName);
+                pitem.replace("{id}", allItem[i].id);
+                if (allItem[i].HT_EM == e_INPUT)
+                {
+                    pitem.replace("{val}", allItem[i].pdata);
+                }
+                if (allItem[i].HT_EM == e_CHECK)
+                {
+                    char *_chkval = allItem[i].pdata;
+                    if (String(_chkval) == "1")
+                        pitem.replace("{chk}", "checked");
+                    else
+                        pitem.replace("{chk}", "");
+                }
+                tmpData += pitem;
+            }
+        }
         tmpData += "</fieldset>";
     }
 
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-    {
-        pitem = h_Elements[allItem[i].HT_EM]; // Grab the type..  Currrently a TEXT or CHECKBOX
-        // crap, what value type is a CHECKBOX!!!!!  T/F  0/1
-        // memset(allItem[0].pdata,0,sizeof(allItem[0].displayName));
-
-        pitem.replace("{lbl}", allItem[i].displayName);
-        pitem.replace("{id}", allItem[i].id);
-        if (allItem[i].HT_EM == e_INPUT)
-        {
-            pitem.replace("{val}", allItem[i].pdata);
-        }
-        if (allItem[i].HT_EM == e_CHECK)
-        {
-            char *_chkval = allItem[i].pdata;
-            if (String(_chkval) == "1")
-                pitem.replace("{chk}", "checked");
-            else
-                pitem.replace("{chk}", "");
-        }
-        tmpData += pitem;
-    }
     ht_form.replace("{fields}", tmpData);
     root_html_template += ht_form;
 
     tmpData = "";
+    // Write the Javascript
     for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
     {
         pitem = h_javascript[allItem[i].HT_EM];
