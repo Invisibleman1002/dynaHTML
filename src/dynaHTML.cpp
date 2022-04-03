@@ -23,9 +23,58 @@
 #include <functional>
 #include <ESPAsyncWebServer.h>
 #include "dynaHTML.h"
+
 dynaHTML::dynaHTML()
 {
 }
+const char content_Type[] = "text/html";
+
+const char html_top[] = R"rawlit(<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sensor Configuration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>)rawlit";
+const char MiligramStyle[] = "*,:after,:before{box-sizing:inherit}html{box-sizing:border-box;font-size:62.5%}body{color:#606c76;font-family:Roboto,'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:1.6em;font-weight:300;letter-spacing:.01em;line-height:1.6}.button,button,input[type=button],input[type=reset],input[type=submit]{background-color:#9b4dca;border:.1rem solid #9b4dca;border-radius:.4rem;color:#fff;cursor:pointer;display:inline-block;font-size:1.1rem;font-weight:700;height:3.8rem;letter-spacing:.1rem;line-height:3.8rem;padding:0 3rem;text-align:center;text-decoration:none;text-transform:uppercase;white-space:nowrap}input:not([type]),input[type=color],input[type=date],input[type=datetime-local],input[type=datetime],input[type=email],input[type=month],input[type=number],input[type=password],input[type=search],input[type=tel],input[type=text],input[type=url],input[type=week],select,textarea{-webkit-appearance:none;background-color:transparent;border:.1rem solid #d1d1d1;border-radius:.4rem;box-shadow:none;box-sizing:inherit;height:3.8rem;padding:.6rem 1rem .7rem;width:100%}label,legend{display:block;font-size:1.6rem;font-weight:700;margin-bottom:.5rem}fieldset{border-width:0;padding:0}input[type=checkbox],input[type=radio]{display:inline}.label-inline{display:inline-block;font-weight:400;margin-left:.5rem}.button,button,dd,dt,li{margin-bottom:1rem}fieldset,input,select,textarea{margin-bottom:1.5rem}.float-right{float:right}";
+const char html_mid[] = R"rawlit(    </style>
+  </head>
+  <body>
+    <div style="text-align: left; display: inline-block; min-width: 260px">)rawlit";
+const char html_form[] = R"rawlit(
+<form>
+{fields}
+</form>
+)rawlit";
+//<fieldset></fieldset>
+const char html_btnJS[] = R"rawlit(
+    </div>
+    <div><button onclick="sv()">Save</button></div>
+    <script id="jsbin-javascript">
+      function udVal(key, val) {
+        var request = new XMLHttpRequest();
+        var url = "/?key=" + key + "&value=" + encodeURIComponent(val);
+        request.open("GET", url, false);
+        request.send(null);
+      }
+      function sv() {
+        {javascript}
+        alert("Configuration Updated. MessageMe Rebooting.");
+      }
+    </script>
+  </body>
+</html>
+)rawlit";
+const char *h_Elements[] = {R"rawlit(
+    <label for="{id}">{lbl}</label>
+    <input type="text" placeholder="{lbl}" value="{val}" id="{id}">
+)rawlit",
+                            R"rawlit(
+    <div class="float-right">
+      <input type="checkbox" id="{id}" {chk}>
+      <label class="label-inline" for="{id}">{lbl}</label>
+    </div>
+)rawlit"};
+const char *h_javascript[] = {"udVal(\"{id}\", document.getElementById(\"{id}\").value);", "udVal(\"{id}\", document.getElementById(\"{id}\").checked ? 1 : 0);"};
 
 void dynaHTML::setCallback(callback_function_t callback)
 {
