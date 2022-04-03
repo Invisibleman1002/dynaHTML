@@ -80,10 +80,19 @@ void dynaHTML::setCallback(callback_function_t callback)
 {
     _callback_function = callback;
 }
-void dynaHTML::setMenuItems(MenuItem aItem[])
+uint16_t dynaHTML::setMenuItems(MenuItem aItem[], uint16_t menucount)
 {
+    Serial.println("..................");
+    Serial.println("[setMenuItems1]");
+    Serial.println(sizeof(aItem) / sizeof(MenuItem));
+    Serial.println(aItem[0].displayName);
     allItem = aItem;
-    NUM_MENU_ITEMS = sizeof(allItem) / sizeof(MenuItem);
+    Serial.println(allItem[0].displayName);
+    Serial.println("......sizeof(allItem)............");
+    Serial.println(sizeof(allItem));
+    // Serial.println(sizeof(allItem)); //
+    Serial.println(sizeof(MenuItem));
+    NUM_MENU_ITEMS = menucount; // sizeof(allItem) / sizeof(MenuItem);
     for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
     {
         Serial.println("[");
@@ -92,6 +101,8 @@ void dynaHTML::setMenuItems(MenuItem aItem[])
         Serial.println(allItem[i].pdata);
         Serial.println("]");
     }
+    Serial.println("..................");
+    return (sizeof(aItem) / sizeof(MenuItem));
 }
 void dynaHTML::resetFunc()
 {

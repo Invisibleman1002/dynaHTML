@@ -67,11 +67,10 @@ class dynaHTML
 {
 public:
   dynaHTML();
-  ~dynaHTML();
   void createHTML(String &root_html_template);
   void handleRequest(AsyncWebServerRequest *request);
   void setCallback(callback_function_t callback);
-  void setMenuItems(MenuItem aItem[]);
+  uint16_t setMenuItems(MenuItem aItem[], uint16_t menucount);
   // callback(topic,payload,len-llen-3-tl-2);
 private:
   // CALLBACK_SIGNATURE;

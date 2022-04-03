@@ -83,7 +83,7 @@ AsyncWebServer server(80);
 WiFiClient espClient;
 PubSubClient client(espClient);
 ESPTelnet telnet;
-// dynaHTML dHTML;
+dynaHTML dHTML;
 
 int brightness = 0; // how bright the LED is
 int fadeAmount = 5; // how many points to fade the LED by
@@ -98,12 +98,7 @@ bool Debugging = false;
 
 Ticker OTAstart;
 Ticker Telnetstart;
-/*
-IPAddress staticIP(192, 168, 0, 232); //ESP static ip
-IPAddress gateway(192, 168, 0, 1);   //IP Address of your WiFi Router (Gateway)
-IPAddress subnet(255, 255, 255, 0);  //Subnet mask
-IPAddress dns(192, 168, 0, 1);//(8, 8, 8, 8);  //DNS
-*/
+
 MenuItem mallItem[] = {{"wiid", "SSID", MyconfigData.wifi_ssid, e_INPUT, 0},
                        {"wipw", "Password", MyconfigData.wifi_pw, e_INPUT, 0},
                        {"msrv", "MQTT Server", MyconfigData.mqtt_server, e_INPUT, 1},
@@ -465,10 +460,7 @@ void reconnect()
         }
     }
 }
-void handleRequest(AsyncWebServerRequest *request)
-{
-    Serial.println("UGH");
-}
+
 void setup()
 {
 
@@ -489,10 +481,17 @@ void setup()
     DEBUG_MSG(MyconfigData.wifi_ssid);
     DEBUG_MSG(MyAPdata.crc32);
 
-    String result;
-    // dHTML.createHTML(result);
-    // Serial.print(result);
-
+    /*     String result;
+        dHTML.createHTML(result);
+        Serial.print(result);
+        dHTML.setCallback(dynaCallback);
+        uint16_t tot = dHTML.setMenuItems(mallItem, NUM_MENU_ITEMS);
+        Serial.print("tot:");
+        Serial.println(tot);
+        Serial.print("NUM_MENU_ITEMS:");
+        Serial.println(NUM_MENU_ITEMS);
+        Serial.print("sizeof:");
+        Serial.println(sizeof(mallItem)); */
     // return;
 
     if (chechee() == false or digitalRead(GPIO4) == LOW)
@@ -504,11 +503,11 @@ void setup()
         IPAddress IP = WiFi.softAPIP();
         // DEBUG_MSG("AP IP address: ");
         // DEBUG_MSG(IP);
-        // dHTML.setCallback(dynaCallback);
-        //   dHTML.setMenuItems(mallItem);
+        dHTML.setCallback(dynaCallback);
+        uint16_t tot = dHTML.setMenuItems(mallItem, NUM_MENU_ITEMS);
 
         server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-                  { handleRequest(request); });
+                  { dHTML.handleRequest(request); });
 
         server.begin();
     }
