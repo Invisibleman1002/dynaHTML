@@ -27,7 +27,7 @@ upload 921600, which works, but interface changes to 460800.
 #include <Ticker.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-
+#include "dynaHTML.h"
 const int sleepSeconds = 60;
 // Update these with values suitable for your network.
 
@@ -66,7 +66,6 @@ bool apValid = false;
 #define EEPROM_SIZE (sizeof(configData) + sizeof(apData))
 #define eepromapstart sizeof(configData)
 
-#include "dynaOrig.h"
 int holdPin = 0; // defines GPIO 0 as the hold pin (will hold CH_PD high untill we power down).
 int pirPin = 12; // defines GPIO 12 as the PIR read pin (reads the state of the PIR output).
 int pir = 1;     // sets the PIR record (pir) to 1 (it must have been we woke up).
@@ -83,6 +82,7 @@ AsyncWebServer server(80);
 WiFiClient espClient;
 PubSubClient client(espClient);
 ESPTelnet telnet;
+// dynaHTML dHTML;
 
 int brightness = 0; // how bright the LED is
 int fadeAmount = 5; // how many points to fade the LED by
@@ -103,10 +103,27 @@ IPAddress gateway(192, 168, 0, 1);   //IP Address of your WiFi Router (Gateway)
 IPAddress subnet(255, 255, 255, 0);  //Subnet mask
 IPAddress dns(192, 168, 0, 1);//(8, 8, 8, 8);  //DNS
 */
-
+MenuItem mallItem[] = {{"wiid", "SSID", MyconfigData.wifi_ssid, e_INPUT, 0},
+                       {"wipw", "Password", MyconfigData.wifi_pw, e_INPUT, 0},
+                       {"msrv", "MQTT Server", MyconfigData.mqtt_server, e_INPUT, 1},
+                       {"ss", "Sensor Publish", MyconfigData.sensorstatus, e_INPUT, 2},
+                       {"sn", "Sensor Name", MyconfigData.sensorname, e_INPUT, 2},
+                       {"mqi", "MQTT ID", MyconfigData.mqtt_id, e_INPUT, 1},
+                       {"mqp", "MQTT PW", MyconfigData.mqtt_key, e_INPUT, 1},
+                       {"powr", "USB Power", MyconfigData.usb_power, e_CHECK, 2}};
+uint16_t NUM_MENU_ITEMS = sizeof(mallItem) / sizeof(MenuItem);
 // Need to save the eeprom data and restart the esp
 void dynaCallback()
 {
+    Serial.println("YOUR CALLBACK WORKED!!!!!!!!!!");
+    Serial.println(MyconfigData.wifi_ssid);
+    Serial.println(MyconfigData.wifi_pw);
+    Serial.println(MyconfigData.mqtt_server);
+    Serial.println(MyconfigData.sensorname);
+    Serial.println(MyconfigData.sensorstatus);
+    Serial.println(MyconfigData.mqtt_id);
+    Serial.println(MyconfigData.mqtt_key);
+    Serial.println(MyconfigData.usb_power);
     saveconfigtoEE(MyconfigData);
     // if we are updating data, force a refresh of the SSID
     MyAPdata.crc32 = 8675309;
@@ -447,7 +464,10 @@ void reconnect()
         }
     }
 }
-
+void handleRequest(AsyncWebServerRequest *request)
+{
+    Serial.println("UGH");
+}
 void setup()
 {
 
@@ -469,8 +489,8 @@ void setup()
     DEBUG_MSG(MyAPdata.crc32);
 
     String result;
-    createHTML(result);
-    Serial.print(result);
+    // dHTML.createHTML(result);
+    // Serial.print(result);
 
     // return;
 
@@ -483,6 +503,8 @@ void setup()
         IPAddress IP = WiFi.softAPIP();
         // DEBUG_MSG("AP IP address: ");
         // DEBUG_MSG(IP);
+        // dHTML.setCallback(dynaCallback);
+        //   dHTML.setMenuItems(mallItem);
 
         server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
                   { handleRequest(request); });
