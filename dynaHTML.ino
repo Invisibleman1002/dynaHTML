@@ -28,7 +28,7 @@ upload 921600, which works, but interface changes to 460800.
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-#include "dynaHTML.h"
+#include <dynaHTML.h>
 const int sleepSeconds = 60;
 // Update these with values suitable for your network.
 

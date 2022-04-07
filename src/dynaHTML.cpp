@@ -1,25 +1,3 @@
-/*
-    ESP8266 WIFI Manager specific to my use case.
-    Saves Data to the EEPPROM.
-    HTML element can be a input type of TEXT of CHECKBOX
-    uses a dynamic array to generate the HTML elements to display.
-    The elements should map to an eeprom variable
-
-    Created by Trey Aughenbaugh
-    https://github.com/Invisibleman1002/dynaHTML
-
-    version 1.1.0
-    * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
-
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   Trey A       03/31/2022   Initial coding for ESP8266
-  1.1.0   Trey A       04/01/2022   Added Grouping
-
-  ! TODO
-    Convert this to a class.
-*/
-
 #include <functional>
 #include <ESPAsyncWebServer.h>
 #include "dynaHTML.h"
@@ -82,32 +60,17 @@ void dynaHTML::setCallback(callback_function_t callback)
 }
 uint16_t dynaHTML::setMenuItems(MenuItem aItem[], uint16_t menucount)
 {
-    Serial.println("..................");
-    Serial.println("[setMenuItems1]");
-    Serial.println(sizeof(aItem) / sizeof(MenuItem));
-    Serial.println(aItem[0].displayName);
     allItem = aItem;
-    Serial.println(allItem[0].displayName);
-    Serial.println("......sizeof(allItem)............");
-    Serial.println(sizeof(allItem));
-    // Serial.println(sizeof(allItem)); //
-    Serial.println(sizeof(MenuItem));
-    NUM_MENU_ITEMS = menucount; // sizeof(allItem) / sizeof(MenuItem);
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-    {
-        Serial.println("[");
-        Serial.println(allItem[i].displayName);
-        Serial.println(allItem[i].id);
-        Serial.println(allItem[i].pdata);
-        Serial.println("]");
-    }
-    Serial.println("..................");
+    NUM_MENU_ITEMS = menucount;
+    /*     for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+        {
+            Serial.println("[");
+            Serial.println(allItem[i].displayName);
+            Serial.println(allItem[i].id);
+            Serial.println(allItem[i].pdata);
+            Serial.println("]");
+        } */
     return (sizeof(aItem) / sizeof(MenuItem));
-}
-void dynaHTML::resetFunc()
-{
-    delay(1000);
-    ESP.restart();
 }
 int dynaHTML::my_min(int a, int b)
 {
@@ -119,8 +82,7 @@ int dynaHTML::my_max(int a, int b)
 }
 void dynaHTML::createHTML(String &root_html_template)
 {
-    Serial.print("NUM_MENU_ITEMS");
-    Serial.println(NUM_MENU_ITEMS);
+
     String pitem;
     String tmpData;
     String ht_form;
@@ -146,7 +108,6 @@ void dynaHTML::createHTML(String &root_html_template)
     }
     // printf("min:%d\nmax:%d\n", imin, imax);
     //  minmax - tried to use min/max/minmax but wasnt getting it to work on this array of structures.
-    /* ! NEED TO DEAL WITH group*/
     for (uint16_t g = 0; g <= imax; g++)
     {
         tmpData += "<fieldset>";
@@ -215,23 +176,13 @@ void dynaHTML::handleRequest(AsyncWebServerRequest *request)
 
             return;
         }
-        Serial.println("Updating[ ");
-        Serial.println(key);
-        Serial.println(value);
-        Serial.println(" ]");
 
         for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
         {
-            Serial.println("displayname[ ");
-            Serial.println(allItem[i].id);
-            Serial.println(String(allItem[i].displayName));
 
             if (key == String(allItem[i].id))
             {
                 size_t lwrite = 0;
-                Serial.println("Updating:");
-                Serial.println(key);
-                Serial.println(value);
                 char *epromdata = allItem[i].pdata;
                 if (allItem[i].HT_EM == e_INPUT)
                 {
@@ -244,16 +195,11 @@ void dynaHTML::handleRequest(AsyncWebServerRequest *request)
                     number_items_Updated++;
                     if (value == "1" or value == "0")
                     {
-                        Serial.println("CHECKBOX:");
-                        Serial.println(key);
-                        Serial.println(value);
                         lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
                     }
                     else
                         strlcpy(epromdata, "0", 2);
                 }
-                Serial.println(lwrite);
-                Serial.println(" ]");
                 break; // hey, we don't need to process the rest, since only one change happens at a time.
             }
         }
@@ -262,26 +208,7 @@ void dynaHTML::handleRequest(AsyncWebServerRequest *request)
 
         if (number_items_Updated == NUM_MENU_ITEMS)
         {
-            // Serial.println("");
-            // Serial.println("");
-            // Serial.println("MyconfigData:");
-            // Serial.println(MyconfigData.wifi_ssid);
-            // Serial.println(MyconfigData.wifi_pw);
-            // Serial.println(MyconfigData.mqtt_server);
-            // Serial.println(MyconfigData.sensorname);
-            // Serial.println(MyconfigData.sensorstatus);
-            // Serial.println(MyconfigData.mqtt_id);
-            // Serial.println(MyconfigData.mqtt_key);
-            // Serial.println(MyconfigData.usb_power);
-            // Serial.println(MyconfigData.usb_power == "1");
-            // Serial.println("MyconfigData:");
-            // saveconfigtoEE(MyconfigData);
-            // // if we are updating data, force a refresh of the SSID
-            // MyAPdata.crc32 = 8675309;
-            // saveAPEE(MyAPdata);
-
-            delay(1000);
-            // resetFunc(); // call reset
+            delay(50);
             if (_callback_function != NULL)
                 _callback_function();
         }
