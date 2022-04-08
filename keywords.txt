@@ -1,0 +1,26 @@
+==================================
+CLASS
+==================================
+dynaHTML	KEYWORD1
+
+==================================
+FUNCTIONS
+==================================
+createHTML	KEYWORD2
+handleRequest	KEYWORD2
+setCallback	KEYWORD2
+setMenuItems	KEYWORD2
+
+==================================
+CONSTANTS
+==================================
+DYNAHTML_H	LITERAL1
+MAX_ID_LEN	LITERAL1
+MAX_DISPLAY_NAME_LEN	LITERAL1
+e_INPUT	LITERAL1
+e_CHECK	LITERAL1
+
+==================================
+DATA TYPES
+==================================
+HTML_ELEMENT	KEYWORD1
