@@ -8,7 +8,7 @@ Since it is manipualting the Configuration struct, you could update the callback
 
 I created another project where I used Milligram (https://milligram.io/) for my style. Its a small framework, but to include it as a string in this project, I extracted only the parts I needed for the form fields I'm using.
 
-The MenuItem struct has the option for grouping. If you add grouping, it will place the items in their own fieldset section, giving a small amount of space between sections. Not requited but you can see the different in the image below.
+The MenuItem struct has the option for grouping. If you add grouping, it will place the items in their own fieldset section, giving a small amount of space between sections. Not required but you can see the difference in the image below.
 
 ![Grouping](./assets/dynaHTML_grouping.png)
 
