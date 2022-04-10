@@ -9,6 +9,8 @@ I created another project where I used Milligram (https://milligram.io/) for my 
 
 The struct has the option for grouping. If you add grouping, it will place the items in their own fieldset section, giving a small amount of space between sections.
 
+![Grouping](./assets/dynaHTML_grouping.png)
+
 # Example
 
 ## Include
