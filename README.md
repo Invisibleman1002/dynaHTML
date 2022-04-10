@@ -4,7 +4,7 @@ Dynamic HTML is a dynamic form generator. After designing a few sensors and proj
 
 Currently I've only tested on the esp8266 series, but should work on esp32. Again, untested at this point.
 
-Since it is manipualting the Configuration struct, you could update the callback to save to an alternate location. I've only testing using the EEPROM but since the class only updates the pointer to the configuration data and your callback saves the info, I imagine any storage could be used.
+Since it is manipulating the Configuration struct, you could update the callback to save to an alternate location. I've only testing using the EEPROM but since the class only updates the pointer to the configuration data and your callback saves the info, I imagine any storage could be used.
 
 I created another project where I used Milligram (https://milligram.io/) for my style. Its a small framework, but to include it as a string in this project, I extracted only the parts I needed for the form fields I'm using.
 
@@ -18,7 +18,7 @@ On first run, the example looks for a couple magic numbers in the EEPROM. If tho
 
 While in Config mode, the built_in led will fade on and off.
 
-In run mode, it will post an incrimental number to the mqtt topic.
+In run mode, it will post an incremental number to the mqtt topic.
 
 All code was tested on ESP 12-F modules as well as nodemcu.
 
@@ -105,10 +105,10 @@ See image above for an example of the HTML that is displayed upon connecting to 
 - Work with a _callback_ from a cpp class.
 - Use an ESP8266 as a Web Server to process your form fields.
 - [Basic.ino](./examples/Basic/Basic.ino) example shows how to use this in real world scenario, setup WIFI data, save to eeprom, reboot, load and connect to wifi and mqtt.
-- Also saves BSSID from wifi, to allow connection times from a typical 3-5 seconds to less than 500ms on my internal moquitto Home assistance instance.
+- Also saves BSSID from wifi, to allow connection times from a typical 3-5 seconds to less than 500ms on my internal mosquito Home assistance instance.
 - Use a input pin GPIO4 pulled low to manually force setup mode for those oops moments of typing wrong SSID.
 - OH! Over the Air (OTA) programing in Visual Studio Code (VSC). I created a task which allows me to use OTA, works great. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices IP.
-- Serial Programming from a task. Have you ever compiled your code and left your Serial terminal running(YAT!)? Now the code you just waited for what seems like forever to compile to tell you the serial port is denied access.. So I created a task to send the just compiled code to the microcontroller. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices COM PORT.
+- Serial Programming from a task. Have you ever compiled your code and left your Serial terminal running(YAT!)? Now the code you just waited for what seems like forever to compile to tell you the serial port is denied access.. So I created a task to send the just compiled code to the micro-controller. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices COM PORT.
 
 # This would not be possible without learning from some of these projects.
 
