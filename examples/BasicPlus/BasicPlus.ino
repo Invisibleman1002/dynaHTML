@@ -21,6 +21,7 @@ All code was tested on ESP 12-F modules as well as nodemcu.
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <ArduinoOTA.h>
 
 #include <dynaHTML.h>
 
@@ -33,6 +34,7 @@ All code was tested on ESP 12-F modules as well as nodemcu.
 
 const char *ssidAP = "ESP_DynaHTML";
 const char *passwordAP = "12345678";
+#define OTA_PASSDW "admin"
 
 struct configData
 {
@@ -119,6 +121,50 @@ void dynaCallback()
     saveAPEE(MyAPdata);
     delay(1000);
     ESP.restart();
+}
+
+void OTAinit()
+{
+    // Port defaults to 8266
+    ArduinoOTA.setPort(8266);
+
+    // Hostname defaults to esp8266-[ChipID]
+    // ArduinoOTA.setHostname("DOOR-FRONT-ESP");
+    ArduinoOTA.setHostname(MyconfigData.sensorname);
+    // if (DEBUG == false) {
+    //  Comment to: No authentication by default
+    ArduinoOTA.setPassword(OTA_PASSDW);
+    // Password can be set with it's md5 value as well
+    // MD5(admin) = 21232f297a57a5a743894a0e4a801fc3
+    // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
+    // }
+
+    ArduinoOTA.onStart([]()
+                       {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH)
+      type = "sketch";
+    else // U_SPIFFS
+      type = "filesystem";
+
+    // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+    Serial.println("Start updating " + type); });
+    ArduinoOTA.onEnd([]()
+                     { Serial.println("\nEnd"); });
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total)
+                          { Serial.printf("Progress: %u%%\r\n", (progress / (total / 100))); });
+    ArduinoOTA.onError([](ota_error_t error)
+                       {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed"); });
+    ArduinoOTA.begin();
+    Serial.println("Ready");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
 }
 
 uint32_t calculateCRC32(const uint8_t *data, size_t length)
@@ -344,6 +390,9 @@ void setup()
         digitalWrite(LED_BUILTIN, HIGH);
         delay(100);
         digitalWrite(LED_BUILTIN, LOW);
+        OTAinit();
+
+        Serial.println(WiFi.localIP().toString());
     }
 }
 

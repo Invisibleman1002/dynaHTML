@@ -35,6 +35,7 @@ typedef enum
 #define MAX_ID_LEN 6
 #define MAX_DISPLAY_NAME_LEN 16
 
+//                     HTML ID, LABEL,  Your struct char data, TEXT/CHECK, GROUP
 typedef struct
 {
   char id[MAX_ID_LEN + 1];
