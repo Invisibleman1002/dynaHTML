@@ -1,5 +1,5 @@
 /*
-DyanHTML Basic test.
+DyanHTML Basic Plus OTA test.
 
 A lot of my projects use a MQTT connected over wifi.
 So here is a pretty basic example.
@@ -10,7 +10,17 @@ While in Config mode, the built_in led will fade on and off.
 
 In run mode, it will post an incremental number to the mqtt topic.
 
-All code was tested on ESP 12-F modules as well as nodemcu.
+All code was tested on ESP 12-F modules as well as a nodemcu.
+
+Example:
+Added bool USBpower = false; > Pulls from a HTML Checkbox.
+I have a sensor that can run on battery(CR123a) or USB Power by a Micro USB.
+My battery powered devices go into deep hybernation.
+The USB powered mode is for use with power hungry sensors where battery use is not feasible.
+
+Added OTA programming.
+Check my tasks.json file on how to use that within Visual Studio Code.
+    F1 > RUN TASK > OTA UPload *Make sure you have the correct IP address and admin password, etc.
 
 */
 
@@ -35,7 +45,7 @@ All code was tested on ESP 12-F modules as well as nodemcu.
 const char *ssidAP = "ESP_DynaHTML";
 const char *passwordAP = "12345678";
 #define OTA_PASSDW "admin"
-
+bool USBpower = false;
 struct configData
 {
     char wifi_ssid[SSID_MAX_LEN];
@@ -358,7 +368,6 @@ void setup()
     Serial.println("Config/ap data");
     Serial.println(MyconfigData.wifi_ssid);
     Serial.println(MyAPdata.crc32);
-    Serial.println(hasConfig);
 
     if (hasConfig == false or digitalRead(GPIO4) == LOW)
     {
@@ -375,6 +384,8 @@ void setup()
                   { dHTML.handleRequest(request); });
 
         server.begin();
+
+        USBpower = (strcmp(MyconfigData.usb_power, "1") == 0);
     }
     if (hasConfig == true and digitalRead(GPIO4) == HIGH)
     {
@@ -436,6 +447,11 @@ void loop()
 
             client.publish(MyconfigData.sensorstatus, msg);
             digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+
+            if (USBpower == true)
+            {
+                Serial.println("USB POWER ENABLED");
+            }
         }
     }
 }
