@@ -107,8 +107,8 @@ See image above for an example of the HTML that is displayed upon connecting to 
 - [Basic.ino](./examples/Basic/Basic.ino) example shows how to use this in real world scenario, setup WIFI data, save to eeprom, reboot, load and connect to wifi and mqtt.
 - Also saves BSSID from wifi, to allow connection times from a typical 3-5 seconds to less than 500ms on my internal mosquito Home assistance instance.
 - Use a input pin GPIO4 pulled low to manually force setup mode for those oops moments of typing wrong SSID.
-- OH! Over the Air (OTA) programing in Visual Studio Code (VSC). I created a task which allows me to use OTA, works great. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices IP.
-- Serial Programming from a task. Have you ever compiled your code and left your Serial terminal running(YAT!)? Now the code you just waited for what seems like forever to compile to tell you the serial port is denied access.. So I created a task to send the just compiled code to the micro-controller. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices COM PORT.
+- OH! Over the Air (OTA) programing in Visual Studio Code (VSC). I created a task which allows me to use OTA, works great. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices IP. Also see below.
+- Serial Programming from a task. Have you ever compiled your code and left your Serial terminal running(YAT!)? Now the code you just waited for what seems like forever to compile to tell you the serial port is denied access.. So I created a task to send the just compiled code to the micro-controller. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices COM PORT. Also see below.
 
 # This would not be possible without learning from some of these projects.
 
@@ -121,5 +121,15 @@ See image above for an example of the HTML that is displayed upon connecting to 
 
 - **Installing a Library** https://www.baldengineer.com/installing-arduino-library-from-github.html
 - **Running Tasks** https://code.visualstudio.com/docs/editor/tasks
+
+# COM PROGRAMMING
+
+Have you ever clicked Upload... Excited for you to upload your awesome code and you get the access denied to COM port because you forget to shut down the Serial Monitor? Instead of doing a recompile, do this. The compiled code is still there. At least it is on my setup. Maybe because in my arduino.json file I specify the output location to be in its own subfolder.
+![COMPROGRAMMING](./assets/BasicPlusCOM.gif)
+
+# OTA PROGRAMMING
+
+Visual Studio Code does not have a built in OTA programming option like the Arduino IDE. It can be added by adding a task though. Grab my task.json file and modify for your esp, port and password.
+![OTAPROGRAMMING](./assets/BasicPlusOTA.gif)
 
 # THANK YOU

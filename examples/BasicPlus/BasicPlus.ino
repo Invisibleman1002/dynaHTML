@@ -46,6 +46,7 @@ const char *ssidAP = "ESP_DynaHTML";
 const char *passwordAP = "12345678";
 #define OTA_PASSDW "admin"
 bool USBpower = false;
+
 struct configData
 {
     char wifi_ssid[SSID_MAX_LEN];
@@ -384,8 +385,6 @@ void setup()
                   { dHTML.handleRequest(request); });
 
         server.begin();
-
-        USBpower = (strcmp(MyconfigData.usb_power, "1") == 0);
     }
     if (hasConfig == true and digitalRead(GPIO4) == HIGH)
     {
@@ -402,7 +401,7 @@ void setup()
         delay(100);
         digitalWrite(LED_BUILTIN, LOW);
         OTAinit();
-
+        USBpower = (strcmp(MyconfigData.usb_power, "1") == 0);
         Serial.println(WiFi.localIP().toString());
     }
 }
@@ -416,6 +415,8 @@ void loop()
             reconnect();
         }
         client.loop();
+
+        ArduinoOTA.handle();
     }
     unsigned long now = millis();
 

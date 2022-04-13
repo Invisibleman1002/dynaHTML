@@ -3,10 +3,7 @@
 flash size: FS 2mb ota 1019k
 upload 921600, which works, but interface changes to 460800.
 
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   Trey A       03/31/2022  Initial coding for ESP8266
-  1.1.0   Trey A       04/01/2022  Added Grouping
+
 
 */
 #define DEBUG_ON 1
@@ -29,7 +26,7 @@ upload 921600, which works, but interface changes to 460800.
 #include <PubSubClient.h>
 
 #include <dynaHTML.h>
-const int sleepSeconds = 60;
+
 // Update these with values suitable for your network.
 
 #define SSID_MAX_LEN 32
@@ -131,21 +128,10 @@ void dynaCallback()
 void create_NEW_feed(char *strng, char *NEWNAME)
 {
     printf(" strng '%s'\n", strng);
-    // char str[ADA_FEED_LEN]; // = "home/door/front/open";
-    // char strng[ADA_FEED_LEN]; //"home/door/front/open";
-    //  const char s[2] = "/";
-
-    // strncpy(str, sendfeed, sizeof(sendfeed));
-    // printf( " sendfeed '%s'\n",  sendfeed  );
-    // printf( " str '%s'\n",  str  );
     char *pch;
     pch = strrchr(strng, '/');
     if (pch != NULL)
         strncpy(pch + 1, NEWNAME, sizeof(NEWNAME));
-    // strncpy(pch, "vcc", 6);
-    //  Serial.printf(" %s\n", strng);
-    // Serial.print("STRGINSGNKKNT");
-    //  Serial.println(strng);
 }
 
 uint32_t calculateCRC32(const uint8_t *data, size_t length)
@@ -544,19 +530,6 @@ void setup()
         DEBUG_WHERE;
     }
 }
-/*  WOUld like to do this withouth using STRING for the BSSID
-String mac2String(byte ar[]) {
-  String s;
-  for (byte i = 0; i < 6; ++i)
-  {
-    char buf[3];
-    sprintf(buf, "%02X", ar[i]); // J-M-L: slight modification, added the 0 in the format for padding
-    s += buf;
-    if (i < 5) s += ':';
-  }
-  return s;
-}
-*/
 
 void loop()
 {
@@ -635,11 +608,6 @@ void loop()
         telnet.loop();
 
         MDNS.update();
-        // send serial input to telnet as output
-        // if (Serial.available())
-        // {
-        //   telnet.print(Serial.read());
-        // }
     }
 
     if (configmode == CONFIG)
