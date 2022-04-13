@@ -22,6 +22,11 @@ In run mode, it will post an incremental number to the mqtt topic.
 
 All code was tested on ESP 12-F modules as well as nodemcu.
 
+TODO:
+
+- Account for not setting up the call back and throw an error.
+- I should also add checks for other things not setup.
+
 # Example
 
 ## Include
@@ -125,11 +130,17 @@ See image above for an example of the HTML that is displayed upon connecting to 
 # COM PROGRAMMING
 
 Have you ever clicked Upload... Excited for you to upload your awesome code and you get the access denied to COM port because you forget to shut down the Serial Monitor? Instead of doing a recompile, do this. The compiled code is still there. At least it is on my setup. Maybe because in my arduino.json file I specify the output location to be in its own subfolder.
+**Make sure your .ino file is active when running COM Upload** otherwise it will try to upload the currently active file.
 ![COMPROGRAMMING](./assets/BasicPlusCOM.gif)
 
 # OTA PROGRAMMING
 
-Visual Studio Code does not have a built in OTA programming option like the Arduino IDE. It can be added by adding a task though. Grab my task.json file and modify for your esp, port and password.
+Visual Studio Code does not have a built in OTA programming option like the Arduino IDE. It can be added by adding a task. Grab my task.json file and modify for your esp, port and password.
+**Make sure your .ino file is active when running OTA Upload** otherwise it will try to upload the currently active file.
 ![OTAPROGRAMMING](./assets/BasicPlusOTA.gif)
 
 # THANK YOU
+
+Trey
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q510IO8)

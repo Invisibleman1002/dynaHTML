@@ -8,7 +8,8 @@
     Created by Trey Aughenbaugh
     https://github.com/Invisibleman1002/dynaHTML
 
-    version 1.2.1
+    version 1.2.2
+
     * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 
   Version Modified By   Date        Comments
@@ -17,6 +18,7 @@
   1.1.0   Trey A       04/01/2022   Added Grouping
   1.2.0   Trey A       04/02/2022   Converted to a class
   1.2.1   Trey A       04/05/2022   Cleaned up Code/Removed Serial Print!.
+  1.2.2   Trey A       04/13/2022   Added check for NUM_MENU_ITEMS == 0
 
 
 */
@@ -70,7 +72,7 @@ private:
   int my_min(int a, int b);
   int my_max(int a, int b);
   MenuItem *allItem;
-  uint16_t NUM_MENU_ITEMS;
+  uint16_t NUM_MENU_ITEMS = 0;
 
 protected:
   callback_function_t _callback_function = nullptr;

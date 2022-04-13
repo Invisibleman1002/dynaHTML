@@ -82,6 +82,11 @@ int dynaHTML::my_max(int a, int b)
 }
 void dynaHTML::createHTML(String &root_html_template)
 {
+    if (NUM_MENU_ITEMS == 0)
+    {
+        root_html_template = "You missed some important setup details.";
+        return;
+    }
 
     String pitem;
     String tmpData;
@@ -208,7 +213,7 @@ void dynaHTML::handleRequest(AsyncWebServerRequest *request)
 
         if (number_items_Updated == NUM_MENU_ITEMS)
         {
-            delay(50);
+            delay(60);
             if (_callback_function != NULL)
                 _callback_function();
         }

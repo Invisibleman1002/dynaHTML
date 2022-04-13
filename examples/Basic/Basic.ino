@@ -62,7 +62,6 @@ struct cStart
 };
 cStart ColdStart = {};
 bool hasConfig = false;
-// configData MyconfigData = {"A11_IOT", "SKIOT", "192.168.0.44", "home/door/side/open", "SIDE-DOOR", "mqtt", "mqtt"};
 
 #define eepromstart 0
 #define EEPROM_SIZE (sizeof(configData) + sizeof(apData) + sizeof(cStart))
