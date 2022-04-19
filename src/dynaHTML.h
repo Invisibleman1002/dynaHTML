@@ -8,7 +8,7 @@
     Created by Trey Aughenbaugh
     https://github.com/Invisibleman1002/dynaHTML
 
-    version 1.2.2
+    version 1.2.4
 
     * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 
@@ -19,7 +19,7 @@
   1.2.0   Trey A       04/02/2022   Converted to a class
   1.2.1   Trey A       04/05/2022   Cleaned up Code/Removed Serial Print!.
   1.2.2   Trey A       04/13/2022   Added check for NUM_MENU_ITEMS == 0
-
+  1.2.4   Trey A       04/18/2022   Added e_PASS type for input type="password". For those of you who like to not see your password on screen.
 
 */
 #ifndef DYNAHTML_H
@@ -27,11 +27,11 @@
 
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h>
-
 typedef enum
 {
   e_INPUT = 0,
   e_CHECK = 1, // for a Checkbox, allow only 1 / 0 for expected value when checked or not
+  e_PASS = 2
 } HTML_ELEMENT;
 
 #define MAX_ID_LEN 6

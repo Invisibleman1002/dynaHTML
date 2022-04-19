@@ -39,6 +39,8 @@ dynaHTML dHTML;
 
 ## Setup your form fields with this structure
 
+##### This structure is a part of the Library, just use it like below to create your _MenuItem_ list.
+
 ```
 typedef struct
 {
@@ -115,7 +117,18 @@ See image above for an example of the HTML that is displayed upon connecting to 
 - OH! Over the Air (OTA) programing in Visual Studio Code (VSC). I created a task which allows me to use OTA, works great. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices IP. Also see below.
 - Serial Programming from a task. Have you ever compiled your code and left your Serial terminal running(YAT!)? Now the code you just waited for what seems like forever to compile to tell you the serial port is denied access.. So I created a task to send the just compiled code to the micro-controller. See **[tasks.json](./.vscode/tasks.json)** and adjust for your devices COM PORT. Also see below.
 
-# This would not be possible without learning from some of these projects.
+# Versions
+
+- 1.2.4 04/18/2022 Added e_PASS type for input type="password"
+  - {"wipw", "Password", MyconfigData.wifi_pw, e_INPUT, 0}
+  - =_becomes_=
+  - {"wipw", "Password", MyconfigData.wifi_pw, e_PASS, 0},
+- 1.2.3 04/13/2022 Basically change the properties file to match versions.
+- 1.2.2 04/13/2022 Added check for NUM_MENU_ITEMS == 0
+- 1.2.1 04/05/2022 Cleaned up Code/Removed Serial Print!.
+- 1.2.0 04/02/2022 Converted to a class
+
+# This would not be possible without learning from or using some of these projects.
 
 - **WifiManager Lite** by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 - **Milligram -** _A minimalist CSS framework_ https://milligram.io/
@@ -129,7 +142,7 @@ See image above for an example of the HTML that is displayed upon connecting to 
 
 # COM PROGRAMMING
 
-Have you ever clicked Upload... Excited for you to upload your awesome code and you get the access denied to COM port because you forget to shut down the Serial Monitor? Instead of doing a recompile, do this. The compiled code is still there. At least it is on my setup. Maybe because in my arduino.json file I specify the output location to be in its own subfolder.
+Have you ever clicked Upload... and you get the access denied to COM port because you forget to shut down the Serial Monitor? Instead of doing a recompile, do this. The compiled code is still there. At least it is on my setup. Maybe because in my arduino.json file I specify the output location to be in its own subfolder.
 **Make sure your .ino file is active when running COM Upload** otherwise it will try to upload the currently active file.
 ![COMPROGRAMMING](./assets/BasicPlusCOM.gif)
 

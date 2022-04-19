@@ -36,7 +36,7 @@ const char html_btnJS[] = R"rawlit(
       }
       function sv() {
         {javascript}
-        alert("Configuration Updated. MessageMe Rebooting.");
+        alert("Configuration Updated....Rebooting.");
       }
     </script>
   </body>
@@ -51,8 +51,12 @@ const char *h_Elements[] = {R"rawlit(
       <input type="checkbox" id="{id}" {chk}>
       <label class="label-inline" for="{id}">{lbl}</label>
     </div>
+)rawlit",
+                            R"rawlit(
+    <label for="{id}">{lbl}</label>
+    <input type="password" value="{val}" id="{id}">
 )rawlit"};
-const char *h_javascript[] = {"udVal(\"{id}\", document.getElementById(\"{id}\").value);", "udVal(\"{id}\", document.getElementById(\"{id}\").checked ? 1 : 0);"};
+const char *h_javascript[] = {"udVal(\"{id}\", document.getElementById(\"{id}\").value);", "udVal(\"{id}\", document.getElementById(\"{id}\").checked ? 1 : 0);", "udVal(\"{id}\", document.getElementById(\"{id}\").value);"};
 
 void dynaHTML::setCallback(callback_function_t callback)
 {
@@ -118,13 +122,14 @@ void dynaHTML::createHTML(String &root_html_template)
         tmpData += "<fieldset>";
         for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
         {
+            pitem = "";
             if (allItem[i].group == g)
             {
                 pitem = h_Elements[allItem[i].HT_EM]; // Grab the type..  Currrently a TEXT or CHECKBOX
 
                 pitem.replace("{lbl}", allItem[i].displayName);
                 pitem.replace("{id}", allItem[i].id);
-                if (allItem[i].HT_EM == e_INPUT)
+                if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
                 {
                     pitem.replace("{val}", allItem[i].pdata);
                 }
@@ -189,7 +194,7 @@ void dynaHTML::handleRequest(AsyncWebServerRequest *request)
             {
                 size_t lwrite = 0;
                 char *epromdata = allItem[i].pdata;
-                if (allItem[i].HT_EM == e_INPUT)
+                if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
                 {
                     // strlcpy is designed to solve the null-termination problems – it always null-terminates.
                     lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
