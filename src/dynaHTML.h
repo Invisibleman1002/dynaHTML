@@ -8,7 +8,7 @@
     Created by Trey Aughenbaugh
     https://github.com/Invisibleman1002/dynaHTML
 
-    version 1.2.4
+    version 1.2.5
 
     * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 
@@ -20,6 +20,7 @@
   1.2.1   Trey A       04/05/2022   Cleaned up Code/Removed Serial Print!.
   1.2.2   Trey A       04/13/2022   Added check for NUM_MENU_ITEMS == 0
   1.2.4   Trey A       04/18/2022   Added e_PASS type for input type="password". For those of you who like to not see your password on screen.
+  1.2.5   Trey A       05/03/2022   Checked to see if it works with ESP32.  I APPROVE.  Updating.
 
 */
 #ifndef DYNAHTML_H

@@ -74,7 +74,7 @@ uint16_t dynaHTML::setMenuItems(MenuItem aItem[], uint16_t menucount)
             Serial.println(allItem[i].pdata);
             Serial.println("]");
         } */
-    return (sizeof(aItem) / sizeof(MenuItem));
+    return NUM_MENU_ITEMS;
 }
 int dynaHTML::my_min(int a, int b)
 {
