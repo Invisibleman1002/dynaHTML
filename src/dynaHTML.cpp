@@ -20,6 +20,21 @@ const char html_mid[] = R"rawlit(    </style>
     <div style="text-align: left; display: inline-block; min-width: 260px">)rawlit";
 const char html_form[] = R"rawlit(
 <form>
+      <fieldset>
+        <div>
+          <label>JSON CREDENTIALS</label>
+          <div>
+            <input
+              type="text"
+              value=""
+              placeholder="paste json string"
+              id="qrjson"
+              onpaste="QR_to_Form(event)"
+              onblur="QR_to_Form(event)"
+            />
+          </div>
+        </div>
+      </fieldset>
 {fields}
 </form>
 )rawlit";
@@ -33,6 +48,18 @@ const char html_btnJS[] = R"rawlit(
         var url = "/?key=" + key + "&value=" + encodeURIComponent(val);
         request.open("GET", url, false);
         request.send(null);
+      }
+      function QR_to_Form(event) {
+        let qrjson = (event.clipboardData || window.clipboardData).getData(
+          "text"
+        );
+        var jobj = JSON.parse(qrjson);
+        let inputs = document.getElementsByTagName("input");
+        for (index = 0; index < inputs.length; ++index) {
+          if (jobj[inputs[index].id] !== undefined) {
+            inputs[index].value = jobj[inputs[index].id];
+          }
+        }
       }
       function sv() {
         {javascript}
@@ -55,172 +82,187 @@ const char *h_Elements[] = {R"rawlit(
                             R"rawlit(
     <label for="{id}">{lbl}</label>
     <input type="password" value="{val}" id="{id}">
+    <div class="float-right">
+            <input
+              type="checkbox"
+              id="confirmField"
+              onclick="
+              var x = document.getElementById('{id}');
+              if (x.type === 'password') {
+                x.type = 'text';
+              } else {
+                x.type = 'password';
+              }
+            "
+            />
+            <label class="label-inline" for="confirmField">{lbl}</label>
+    </div>
 )rawlit"};
 const char *h_javascript[] = {"udVal(\"{id}\", document.getElementById(\"{id}\").value);", "udVal(\"{id}\", document.getElementById(\"{id}\").checked ? 1 : 0);", "udVal(\"{id}\", document.getElementById(\"{id}\").value);"};
 
 void dynaHTML::setCallback(callback_function_t callback)
 {
-    _callback_function = callback;
+  _callback_function = callback;
 }
 uint16_t dynaHTML::setMenuItems(MenuItem aItem[], uint16_t menucount)
 {
-    allItem = aItem;
-    NUM_MENU_ITEMS = menucount;
-    /*     for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-        {
-            Serial.println("[");
-            Serial.println(allItem[i].displayName);
-            Serial.println(allItem[i].id);
-            Serial.println(allItem[i].pdata);
-            Serial.println("]");
-        } */
-    return NUM_MENU_ITEMS;
+  allItem = aItem;
+  NUM_MENU_ITEMS = menucount;
+  /*     for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+      {
+          Serial.println("[");
+          Serial.println(allItem[i].displayName);
+          Serial.println(allItem[i].id);
+          Serial.println(allItem[i].pdata);
+          Serial.println("]");
+      } */
+  return NUM_MENU_ITEMS;
 }
 int dynaHTML::my_min(int a, int b)
 {
-    return a <= b ? a : b;
+  return a <= b ? a : b;
 }
 int dynaHTML::my_max(int a, int b)
 {
-    return b <= a ? a : b;
+  return b <= a ? a : b;
 }
 void dynaHTML::createHTML(String &root_html_template)
 {
-    if (NUM_MENU_ITEMS == 0)
-    {
-        root_html_template = "You missed some important setup details.";
-        return;
-    }
-
-    String pitem;
-    String tmpData;
-    String ht_form;
-    String ht_js;
-    ht_form = String(html_form);
-    ht_js = String(html_btnJS);
-    root_html_template = "";
-    root_html_template = html_top;
-
-    root_html_template += MiligramStyle;
-    root_html_template += html_mid;
-
-    uint8_t group = 0;
-    tmpData = "";
-
-    int imin = 0;
-    int imax = 0;
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-    {
-        imin = my_min(allItem[i].group, imin);
-
-        imax = my_max(allItem[i].group, imax);
-    }
-    // printf("min:%d\nmax:%d\n", imin, imax);
-    //  minmax - tried to use min/max/minmax but wasnt getting it to work on this array of structures.
-    for (uint16_t g = 0; g <= imax; g++)
-    {
-        tmpData += "<fieldset>";
-        for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-        {
-            pitem = "";
-            if (allItem[i].group == g)
-            {
-                pitem = h_Elements[allItem[i].HT_EM]; // Grab the type..  Currrently a TEXT or CHECKBOX
-
-                pitem.replace("{lbl}", allItem[i].displayName);
-                pitem.replace("{id}", allItem[i].id);
-                if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
-                {
-                    pitem.replace("{val}", allItem[i].pdata);
-                }
-                if (allItem[i].HT_EM == e_CHECK)
-                {
-                    char *_chkval = allItem[i].pdata;
-                    if (String(_chkval) == "1")
-                        pitem.replace("{chk}", "checked");
-                    else
-                        pitem.replace("{chk}", "");
-                }
-                tmpData += pitem;
-            }
-        }
-        tmpData += "</fieldset>";
-    }
-
-    ht_form.replace("{fields}", tmpData);
-    root_html_template += ht_form;
-
-    tmpData = "";
-    // Write the Javascript
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-    {
-        pitem = h_javascript[allItem[i].HT_EM];
-        pitem.replace("{id}", allItem[i].id);
-
-        tmpData += pitem;
-    }
-    ht_js.replace("{javascript}", tmpData);
-    root_html_template += ht_js;
-
+  if (NUM_MENU_ITEMS == 0)
+  {
+    root_html_template = "You missed some important setup details.";
     return;
+  }
+
+  String pitem;
+  String tmpData;
+  String ht_form;
+  String ht_js;
+  ht_form = String(html_form);
+  ht_js = String(html_btnJS);
+  root_html_template = "";
+  root_html_template = html_top;
+
+  root_html_template += MiligramStyle;
+  root_html_template += html_mid;
+
+  uint8_t group = 0;
+  tmpData = "";
+
+  int imin = 0;
+  int imax = 0;
+  for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+  {
+    imin = my_min(allItem[i].group, imin);
+
+    imax = my_max(allItem[i].group, imax);
+  }
+  // printf("min:%d\nmax:%d\n", imin, imax);
+  //  minmax - tried to use min/max/minmax but wasnt getting it to work on this array of structures.
+  for (uint16_t g = 0; g <= imax; g++)
+  {
+    tmpData += "<fieldset>";
+    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+    {
+      pitem = "";
+      if (allItem[i].group == g)
+      {
+        pitem = h_Elements[allItem[i].HT_EM]; // Grab the type..  Currrently a TEXT or CHECKBOX
+
+        pitem.replace("{lbl}", allItem[i].displayName);
+        pitem.replace("{id}", allItem[i].id);
+        if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
+        {
+          pitem.replace("{val}", allItem[i].pdata);
+        }
+        if (allItem[i].HT_EM == e_CHECK)
+        {
+          char *_chkval = allItem[i].pdata;
+          if (String(_chkval) == "1")
+            pitem.replace("{chk}", "checked");
+          else
+            pitem.replace("{chk}", "");
+        }
+        tmpData += pitem;
+      }
+    }
+    tmpData += "</fieldset>";
+  }
+
+  ht_form.replace("{fields}", tmpData);
+  root_html_template += ht_form;
+
+  tmpData = "";
+  // Write the Javascript
+  for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+  {
+    pitem = h_javascript[allItem[i].HT_EM];
+    pitem.replace("{id}", allItem[i].id);
+
+    tmpData += pitem;
+  }
+  ht_js.replace("{javascript}", tmpData);
+  root_html_template += ht_js;
+
+  return;
 }
 
 void dynaHTML::handleRequest(AsyncWebServerRequest *request)
 {
-    if (request)
+  if (request)
+  {
+    String key = request->arg("key");
+    String value = request->arg("value");
+
+    static int number_items_Updated = 0;
+
+    if (key == "" && value == "")
     {
-        String key = request->arg("key");
-        String value = request->arg("value");
+      String result;
+      createHTML(result);
 
-        static int number_items_Updated = 0;
+      request->send(200, content_Type, result);
 
-        if (key == "" && value == "")
+      // Fix ESP32-S2 issue with WebServer (https://github.com/espressif/arduino-esp32/issues/4348)
+      delay(1);
+
+      return;
+    }
+
+    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+    {
+
+      if (key == String(allItem[i].id))
+      {
+        size_t lwrite = 0;
+        char *epromdata = allItem[i].pdata;
+        if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
         {
-            String result;
-            createHTML(result);
-
-            request->send(200, content_Type, result);
-
-            // Fix ESP32-S2 issue with WebServer (https://github.com/espressif/arduino-esp32/issues/4348)
-            delay(1);
-
-            return;
+          // strlcpy is designed to solve the null-termination problems – it always null-terminates.
+          lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
+          number_items_Updated++;
         }
-
-        for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+        if (allItem[i].HT_EM == e_CHECK)
         {
-
-            if (key == String(allItem[i].id))
-            {
-                size_t lwrite = 0;
-                char *epromdata = allItem[i].pdata;
-                if ((allItem[i].HT_EM == e_INPUT) or (allItem[i].HT_EM == e_PASS))
-                {
-                    // strlcpy is designed to solve the null-termination problems – it always null-terminates.
-                    lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
-                    number_items_Updated++;
-                }
-                if (allItem[i].HT_EM == e_CHECK)
-                {
-                    number_items_Updated++;
-                    if (value == "1" or value == "0")
-                    {
-                        lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
-                    }
-                    else
-                        strlcpy(epromdata, "0", 2);
-                }
-                break; // hey, we don't need to process the rest, since only one change happens at a time.
-            }
+          number_items_Updated++;
+          if (value == "1" or value == "0")
+          {
+            lwrite = strlcpy(epromdata, value.c_str(), strlen(value.c_str()) + 1);
+          }
+          else
+            strlcpy(epromdata, "0", 2);
         }
+        break; // hey, we don't need to process the rest, since only one change happens at a time.
+      }
+    }
 
-        request->send(200, content_Type, "OK");
+    request->send(200, content_Type, "OK");
 
-        if (number_items_Updated == NUM_MENU_ITEMS)
-        {
-            delay(60);
-            if (_callback_function != NULL)
-                _callback_function();
-        }
-    } // if request
+    if (number_items_Updated == NUM_MENU_ITEMS)
+    {
+      delay(60);
+      if (_callback_function != NULL)
+        _callback_function();
+    }
+  } // if request
 }

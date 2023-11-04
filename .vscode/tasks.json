@@ -52,6 +52,83 @@
         }
       },
       "problemMatcher": []
+    },
+    {
+      "label": "OTA32 Upload",
+      "type": "shell",
+      "command": "py",
+      "args": [
+        "%LOCALAPPDATA%\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\tools\\espota.py",
+        "-i",
+        "192.168.0.153",
+        "-p",
+        "3232",
+        "-a",
+        "admin",
+        "-f",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.bin"
+      ],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "COM32 Upload",
+      "type": "shell",
+      "command": "py",
+      /*
+      HEY!!!!!  This is what I used for a ESP32-WROOM-32 Module.
+      YOU MIGHT NEED TO CHANGE THIS FOR SOMETHING DIFFERENT.
+      I ran the Arduino IDE in verbose mode and grabbed the details below and copied.
+      The ESP32 Dev Module is select.
+      If you run a different module, you might want to look at the details and change.
+esptool.py --chip esp32 --port COM5 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size 4MB 
+0xe000 C:\Users\treya\AppData\Local\Arduino15\packages\esp32\hardware\esp32\2.0.2/tools/partitions/boot_app0.bin 
+0x1000 C:\Users\treya\Documents\Arduino\ArduinoOutput\ESP32_Wellbeing\ESP32_Wellbeing.ino.bootloader.bin 
+0x8000 C:\Users\treya\Documents\Arduino\ArduinoOutput\ESP32_Wellbeing\ESP32_Wellbeing.ino.partitions.bin
+0x10000 C:\Users\treya\Documents\Arduino\ArduinoOutput\ESP32_Wellbeing\ESP32_Wellbeing.ino.bin
+
+      */
+      "args": [
+        "%LOCALAPPDATA%\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\tools\\esptool.py",
+        "--chip",
+        "esp32",
+        "--port",
+        "COM5",
+        "--baud",
+        "921600",
+        "--before",
+        "default_reset",
+        "--after",
+        "hard_reset",
+        "write_flash",
+        "-z",
+        "--flash_mode",
+        "dio",
+        "--flash_freq",
+        "80m",
+        "--flash_size",
+        "4MB", //or detect?
+        "0xe000",
+        "%LOCALAPPDATA%\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.2\\tools\\partitions\\boot_app0.bin",
+        "0x1000",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.bootloader.bin",
+        "0x8000",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.partitions.bin",
+        "0x10000",
+        "${workspaceFolder}\\..\\ArduinoOutput\\${fileBasenameNoExtension}\\${fileBasename}.bin"
+      ],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      },
+      "problemMatcher": []
     }
   ]
 }

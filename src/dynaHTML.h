@@ -8,7 +8,7 @@
     Created by Trey Aughenbaugh
     https://github.com/Invisibleman1002/dynaHTML
 
-    version 1.2.5
+    version 1.2.6
 
     * Thanks to the work done by Khoi Hoang https://github.com/khoih-prog/ESP_WiFiManager_Lite
 
@@ -21,6 +21,8 @@
   1.2.2   Trey A       04/13/2022   Added check for NUM_MENU_ITEMS == 0
   1.2.4   Trey A       04/18/2022   Added e_PASS type for input type="password". For those of you who like to not see your password on screen.
   1.2.5   Trey A       05/03/2022   Checked to see if it works with ESP32.  I APPROVE.  Updating.
+  1.2.6   Trey A       05/17/2022   For input type="password" added the ability to SHOW it.
+          Trey A       05/17/2022   Added a field at top that accepts the field values as a JSON string.  This means scan in with a QRCODE.
 
 */
 #ifndef DYNAHTML_H
@@ -36,7 +38,7 @@ typedef enum
 } HTML_ELEMENT;
 
 #define MAX_ID_LEN 6
-#define MAX_DISPLAY_NAME_LEN 16
+#define MAX_DISPLAY_NAME_LEN 20
 
 //                     HTML ID, LABEL,  Your struct char data, TEXT/CHECK, GROUP
 typedef struct

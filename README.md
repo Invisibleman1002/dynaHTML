@@ -12,6 +12,29 @@ The MenuItem struct has the option for grouping. If you add grouping, it will pl
 
 ![Grouping](./assets/dynaHTML_grouping.png)
 
+## JSON CREDENTIAL
+
+If you go here and generate a QR code using the text like below you can paste the results into the first text box.
+This will then use the field names listed in that string to populate the text boxes with the appropriate values.
+
+https://qr-code-generator.org/#text
+
+For example, using the above URL and pasting in this.
+
+```
+{
+   "wiid":"A11",
+   "wipw":"MyCoolPW",
+   "msrv":"192.168.0.44",
+   "mqi":"mqtt",
+   "mqp":"mqtt",
+   "ss":"home/kitchen/temp",
+   "sn":"Kitchen-Temp",
+}
+```
+
+The QR code can be scanned, select other options on android and copy followed by pasting into the field.
+
 ## Basic.ino
 
 On first run, the example looks for a couple magic numbers in the EEPROM. If those don't exist, it assumes first run and goes straight to configuration mode. If you make a mistake and it can't connect, turn off esp, hold gpio4 low, then turn on. It will then boot into config mode.
@@ -119,6 +142,9 @@ See image above for an example of the HTML that is displayed upon connecting to 
 
 # Versions
 
+- 1.2.6 05/17/2022 For input type="password" added the ability to SHOW it.
+  - 05/19/2022 Added a JSON CREDENTIAL text box for data being as JSON string.
+- 1.2.5 05/03/2022 Checked to see if it works with ESP32. I APPROVE. Updating.
 - 1.2.4 04/18/2022 Added e_PASS type for input type="password"
   - {"wipw", "Password", MyconfigData.wifi_pw, e_INPUT, 0}
   - =_becomes_=
