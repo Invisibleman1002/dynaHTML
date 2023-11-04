@@ -50,10 +50,8 @@ const char html_btnJS[] = R"rawlit(
         request.send(null);
       }
       function QR_to_Form(event) {
-        let qrjson = (event.clipboardData || window.clipboardData).getData(
-          "text"
-        );
-        var jobj = JSON.parse(qrjson);
+        let qrjson = document.getElementById("qrjson");
+        var jobj = JSON.parse(qrjson.value);
         let inputs = document.getElementsByTagName("input");
         for (index = 0; index < inputs.length; ++index) {
           if (jobj[inputs[index].id] !== undefined) {
