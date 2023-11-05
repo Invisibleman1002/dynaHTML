@@ -1,3 +1,4 @@
+name: Validate for Library Submission
 on: [push, pull_request]
 jobs:
   lint:
