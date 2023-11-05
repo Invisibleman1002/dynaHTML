@@ -14,12 +14,14 @@ The MenuItem struct has the option for grouping. If you add grouping, it will pl
 
 ## JSON CREDENTIAL
 
-If you go here and generate a QR code using the text like below you can paste the results into the first text box.
-This will then use the field names listed in that string to populate the text boxes with the appropriate values.
+If you go to the URL below and generate a QR code using the example text like below you can paste the results into the first text box.
+When you click on another textbox, it will parse all the JSON values using the field names to populate the text values.
 
 https://qr-code-generator.org/#text
 
-For example, using the above URL and pasting in this.
+For example, using the above URL and pasting in this text, you can then open your camera to grab the QR code.
+
+_wiid_ is listed below as the HTML ID used for the SSID label.
 
 ```
 {
@@ -29,7 +31,7 @@ For example, using the above URL and pasting in this.
    "mqi":"mqtt",
    "mqp":"mqtt",
    "ss":"home/kitchen/temp",
-   "sn":"Kitchen-Temp",
+   "sn":"Kitchen-Temp"
 }
 ```
 
